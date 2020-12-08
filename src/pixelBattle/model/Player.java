@@ -7,7 +7,7 @@ public class Player {
     protected Tank tank;
 
     public Player(){
-        this.tank = new PixelTank(40, 40, 6, 6);
+        this.tank = new PixelTank(30, 30, 6, 6);
     }
 
     public Tank getTank(){

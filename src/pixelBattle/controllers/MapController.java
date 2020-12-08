@@ -12,6 +12,7 @@ import pixelBattle.model.Player;
 import pixelBattle.model.floors.Floor;
 import pixelBattle.model.floors.StandartFloor;
 import pixelBattle.model.tanks.Tank;
+import pixelBattle.model.tanks.shots.Shot;
 import pixelBattle.model.walls.StandartWall;
 import pixelBattle.model.walls.UnbrokenWall;
 import pixelBattle.model.walls.Wall;
@@ -195,6 +196,10 @@ public class MapController {
                     if(event.getCode() == KeyCode.D){
                         tank.tankRotateRight();
                     }
+                });
+                newScene.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                    Shot shot = tank.tankFire();
+                    shot.makeImage(lawnGrid);
                 });
             }
         });

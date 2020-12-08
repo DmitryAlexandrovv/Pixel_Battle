@@ -16,7 +16,6 @@ public abstract class GameElements implements Serializable {
         this.path = path;
         this.width = width;
         this.height = height;
-
     }
 
     public void makeImage(Pane pane){

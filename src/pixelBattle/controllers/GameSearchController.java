@@ -67,7 +67,7 @@ public class GameSearchController {
                 new KeyFrame(
                         Duration.millis(1000),
                         ae -> {
-                            if(seconds[0] == 5){
+                            if(seconds[0] == 0){
                                 FXMLLoader loader=new FXMLLoader();
                                 loader.setLocation(Main.class.getResource("markup/map.fxml"));
                                 try {

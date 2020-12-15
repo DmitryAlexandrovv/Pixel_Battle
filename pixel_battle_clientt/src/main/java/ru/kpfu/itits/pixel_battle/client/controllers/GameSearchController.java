@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import ru.kpfu.itis.pixel_battle.protocol.UserAction;
+import ru.kpfu.itits.pixel_battle.client.connection.MessageAccepter;
 import ru.kpfu.itits.pixel_battle.client.exceptions.ClientException;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -17,8 +19,12 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import ru.kpfu.itits.pixel_battle.client.Main;
+import ru.kpfu.itits.pixel_battle.client.model.User;
 
 public class GameSearchController {
+    private Timeline timeline;
+    private User user;
+    private MessageAccepter messageAccepter;
 
     @FXML
     private ResourceBundle resources;
@@ -33,11 +39,16 @@ public class GameSearchController {
     private Label gameSearchTimer;
 
     @FXML
+    private Label gameSearchCount;
+
+    @FXML
     private Button backButton;
 
     @FXML
     private void options(MouseEvent event) throws ClientException {
-        HeaderController.options(event);
+        HeaderController controller = new HeaderController();
+        controller.setUser(user);
+        controller.options(event);
     }
 
     @FXML
@@ -46,6 +57,11 @@ public class GameSearchController {
         loader.setLocation(Main.class.getResource("/markup/intro.fxml"));
         try {
             Parent mainLayout = loader.load();
+
+            user.setAction(UserAction.INTRO_MENU);
+            IntroController controller = loader.getController();
+            controller.setUser(user);
+
             Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             appStage.getScene().setRoot(mainLayout);
         } catch (IOException e) {
@@ -60,15 +76,24 @@ public class GameSearchController {
 
         final int[] seconds = {0};
         final int[] minutes = {0};
-        FXMLLoader loader=new FXMLLoader();
-        loader.setLocation(Main.class.getResource("/markup/map.fxml"));
-        Timeline timeline = new Timeline (
+        this.timeline = new Timeline (
                 new KeyFrame(
                         Duration.millis(1000),
+
                         ae -> {
-                            if(seconds[0] == 2){
+                            int usersCount =  messageAccepter.getUsers().size() + 1;
+                            gameSearchCount.setText("Игроков в поиске: " + usersCount);
+                            user.setAction(UserAction.BATTLE_SEARCH);
+                            if(usersCount == 10){
+                                FXMLLoader loader=new FXMLLoader();
+                                loader.setLocation(Main.class.getResource("/markup/map.fxml"));
                                 try {
                                     Parent mainLayout = loader.load();
+
+                                    user.setAction(UserAction.IN_THE_BATTLE);
+                                    MapController controller = loader.getController();
+                                    controller.setUser(user);
+
                                     Stage appStage = (Stage) gameSearchLabel.getScene().getWindow();
                                     appStage.getScene().setRoot(mainLayout);
                                 } catch (IOException e) {
@@ -91,4 +116,10 @@ public class GameSearchController {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
+
+    public void setUser(User user){
+        this.user = user;
+    }
+
+    public void setMessageAccepter(MessageAccepter messageAccepter) { this.messageAccepter = messageAccepter; }
 }

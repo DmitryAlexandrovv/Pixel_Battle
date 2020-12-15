@@ -11,7 +11,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Server {
-    private List<Connection> connections;
+    private volatile List<Connection> connections;
+    private static int id = 0;
 
     public Server() throws IOException {
         connections = new ArrayList<>();
@@ -22,7 +23,7 @@ public class Server {
         ServerSocket s1 = new ServerSocket(Protocol.PORT);
         while (true) {
             Socket client = s1.accept();
-            connections.add(new Connection(this, client));
+            connections.add(new Connection(this, client, id++));
         }
     }
 
@@ -32,5 +33,9 @@ public class Server {
 
     public Iterator<Connection> connectionsIterator(){
         return connections.iterator();
+    }
+
+    public List<Connection> getConnections(){
+        return connections;
     }
 }

@@ -1,14 +1,21 @@
 package ru.kpfu.itits.pixel_battle.client.controllers;
 
+import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
+import ru.kpfu.itis.pixel_battle.protocol.UserAction;
+import ru.kpfu.itits.pixel_battle.client.SocketClient;
+import ru.kpfu.itits.pixel_battle.client.connection.MessageAccepter;
 import ru.kpfu.itits.pixel_battle.client.model.floors.Floor;
 import ru.kpfu.itits.pixel_battle.client.exceptions.ClientException;
-import ru.kpfu.itits.pixel_battle.client.model.Player;
+import ru.kpfu.itits.pixel_battle.client.model.User;
 import ru.kpfu.itits.pixel_battle.client.model.floors.StandartFloor;
 import ru.kpfu.itits.pixel_battle.client.model.tanks.Tank;
 import ru.kpfu.itits.pixel_battle.client.model.tanks.shots.Shot;
@@ -16,7 +23,14 @@ import ru.kpfu.itits.pixel_battle.client.model.walls.StandartWall;
 import ru.kpfu.itits.pixel_battle.client.model.walls.UnbrokenWall;
 import ru.kpfu.itits.pixel_battle.client.model.walls.Wall;
 
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+
 public class MapController {
+    private User user;
+
     @FXML
     public Button optionsMenuButton;
 
@@ -28,10 +42,17 @@ public class MapController {
 
     @FXML
     private void options(MouseEvent event) throws ClientException {
-        HeaderController.options(event);
+        HeaderController controller = new HeaderController();
+        controller.setUser(user);
+        controller.options(event);
+    }
+
+    private Tank getTank(){
+        return user.getTank();
     }
 
     public void initialize() throws Exception {
+
         Wall wall = new UnbrokenWall(40, 40, 0, 0);
         wall.makeImage(lawnGrid);
         wall = new UnbrokenWall(40, 40, 1, 0);
@@ -170,29 +191,32 @@ public class MapController {
         floor = new StandartFloor(40, 40, 11, 4);
         floor.makeImage(lawnGrid);
 
-        Player player = new Player();
-        Tank tank = player.getTank();
-        tank.makeImage(lawnGrid);
-
         lawnGrid.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
+            Tank tank = user.getTank();
+            tank.makeImage(lawnGrid);
+
             if (oldScene == null && newScene != null) {
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                     if(event.getCode() == KeyCode.W){
+                        user.setAction(UserAction.TANK_MOVE_FORWARD);
                         tank.tankMoveForward();
                     }
                 });
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                     if(event.getCode() == KeyCode.S){
+                        user.setAction(UserAction.TANK_MOVE_BACK);
                         tank.tankMoveBack();
                     }
                 });
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                     if(event.getCode() == KeyCode.A){
+                        user.setAction(UserAction.TANK_ROTATE_LEFT);
                         tank.tankRotateLeft();
                     }
                 });
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                     if(event.getCode() == KeyCode.D){
+                        user.setAction(UserAction.TANK_ROTATE_RIGHT);
                         tank.tankRotateRight();
                     }
                 });
@@ -202,5 +226,21 @@ public class MapController {
                 });
             }
         });
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(
+                        Duration.millis(1000),
+                        ae -> {
+
+                        }
+                )
+        );
+
+        timeline.setCycleCount(1);
+        timeline.play();
+    }
+
+    public void setUser(User user){
+        this.user = user;
     }
 }

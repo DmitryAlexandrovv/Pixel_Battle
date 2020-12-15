@@ -1,15 +1,17 @@
 package ru.kpfu.itits.pixel_battle.client.connection;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import ru.kpfu.itis.pixel_battle.protocol.Message;
+import ru.kpfu.itis.pixel_battle.protocol.UserAction;
 import ru.kpfu.itits.pixel_battle.client.SocketClient;
 import ru.kpfu.itits.pixel_battle.client.exceptions.ClientException;
-import ru.kpfu.itis.pixel_battle.protocol.Message;
-import ru.kpfu.itis.pixel_battle.protocol.Type;
+import ru.kpfu.itits.pixel_battle.client.model.User;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.Scanner;
 
 public class MessageSender implements Runnable{
     private SocketClient socket;
@@ -27,15 +29,19 @@ public class MessageSender implements Runnable{
             try (PrintWriter toServer = new PrintWriter(socket.getOutputStream(), true)) {
                 while (true) {
                     // Отправка данных на сервер
-                    Scanner scanner = new Scanner(System.in);
-                    Message request = Message.createMessage(Type.TEXT, scanner.nextLine().getBytes());
+                    User user = socket.getUser();
+                    while(!user.getFlag()){
+                    }
+                    UserAction action = user.getAction();
+                    System.out.println("sender " + action);
+                    Message request = Message.createMessage(action);
                     socket.sendMessage(request);
                 }
+            } catch (ClientException e) {
+                e.printStackTrace();
             }
         } catch (UnknownHostException ex) {
             ex.printStackTrace();
-        } catch (ClientException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             try {
                 if (e instanceof SocketTimeoutException) {

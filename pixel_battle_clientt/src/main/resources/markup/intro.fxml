@@ -48,7 +48,7 @@
                   <Insets top="-30.0" />
                </FlowPane.margin>
             </ImageView>
-            <Button fx:id="toBattleButton" onMouseClicked="#toBattle" styleClass="button" stylesheets="@../../../../../../resources/css/menu.css" text="To battle">
+            <Button fx:id="toBattleButton" onMouseClicked="#toBattle" styleClass="button" text="To battle">
                <FlowPane.margin>
                   <Insets top="80.0" />
                </FlowPane.margin></Button>

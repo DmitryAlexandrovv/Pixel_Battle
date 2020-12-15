@@ -28,11 +28,12 @@
    </FlowPane>
    <FlowPane styleClass="game-search-wrapper" GridPane.rowIndex="1" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
       <children>
+         <Label fx:id="gameSearchCount" styleClass="game-search__text" text="Игроков в поиске: " />
          <Label fx:id="gameSearchLabel" styleClass="game-search__text" text="Поиск игры" />
          <Label fx:id="gameSearchTimer" styleClass="game-search__text" text="0:00" />
          <FlowPane prefHeight="200.0" prefWidth="200.0">
             <children>
-               <Button styleClass="menu__button" onMouseClicked="#goBack" stylesheets="@../../../../../../resources/css/menu.css" fx:id="backButton" text="Back" />
+               <Button styleClass="menu__button" onMouseClicked="#goBack" fx:id="backButton" text="Back" />
             </children>
          </FlowPane>
       </children>

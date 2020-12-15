@@ -14,6 +14,9 @@ public abstract class Tank extends GameElements {
     protected int hp;
     protected double shotSpeed;
     protected double speed;
+    protected double x;
+    protected double y;
+    protected double rotate;
 
     public Tank(String path, int width, int height, int col, int row, double damage, int hp, double shotSpeed, double speed) {
         super(path, width, height);

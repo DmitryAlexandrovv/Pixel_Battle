@@ -84,7 +84,7 @@ public class GameSearchController {
                             int usersCount =  messageAccepter.getUsers().size() + 1;
                             gameSearchCount.setText("Игроков в поиске: " + usersCount);
                             user.setAction(UserAction.BATTLE_SEARCH);
-                            if(usersCount == 10){
+                            if(usersCount == 5){
                                 FXMLLoader loader=new FXMLLoader();
                                 loader.setLocation(Main.class.getResource("/markup/map.fxml"));
                                 try {

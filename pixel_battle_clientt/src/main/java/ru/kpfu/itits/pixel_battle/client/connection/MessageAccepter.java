@@ -30,7 +30,16 @@ public class MessageAccepter implements Runnable{
     }
 
     private void addUser(User user){
-        if(!users.contains(user)){
+        Iterator<User> iterator = users.iterator();
+        boolean flag = false;
+        while(iterator.hasNext()){
+            User userOld = iterator.next();
+            if(userOld.equals(user)){ // реалтзовать equals по ID
+                flag = true;
+            }
+        }
+
+        if(!flag){
             users.add(user);
         }
     }
@@ -44,8 +53,8 @@ public class MessageAccepter implements Runnable{
 
                 System.out.println("accepter " + message.getUserAction());
 
-                if(message.getUserAction().equals(UserAction.BATTLE_SEARCH)){
-                    addUser(new User());
+                if(message.getUserAction().equals(UserAction.USER_CREATED)){
+                    addUser(new User(message.getUserId()));
                 }
             }
         } catch (IOException e) {

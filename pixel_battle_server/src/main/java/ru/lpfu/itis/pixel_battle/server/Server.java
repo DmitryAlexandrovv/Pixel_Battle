@@ -1,6 +1,8 @@
 package ru.lpfu.itis.pixel_battle.server;
 
+import ru.kpfu.itis.pixel_battle.protocol.Message;
 import ru.kpfu.itis.pixel_battle.protocol.Protocol;
+import ru.kpfu.itis.pixel_battle.protocol.UserAction;
 import ru.lpfu.itis.pixel_battle.server.connection.Connection;
 
 import java.io.IOException;
@@ -23,7 +25,9 @@ public class Server {
         ServerSocket s1 = new ServerSocket(Protocol.PORT);
         while (true) {
             Socket client = s1.accept();
-            connections.add(new Connection(this, client, id++));
+            Connection connection = new Connection(this, client, id++);
+            connection.sendMessage(new Message(UserAction.USER_CREATED, connection.getId()));
+            connections.add(connection);
         }
     }
 

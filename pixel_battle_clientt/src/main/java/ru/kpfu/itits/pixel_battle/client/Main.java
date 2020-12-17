@@ -21,18 +21,14 @@ public class Main extends Application {
 
             Parent root = loader.load();
 
-            this.user = new User();
-            AppClient appClient = new AppClient(user);
-
-            user.setAction(UserAction.INTRO_MENU);
+            AppClient appClient = new AppClient();
 
             IntroController controller = loader.getController();
+            this.user = new User(0);
             controller.setUser(user);
+            user.setAction(UserAction.INTRO_MENU);
 
-            while(appClient.getMessageAccepter() == null){
-            }
-
-            controller.setMessageAccepter(appClient.getMessageAccepter());
+//            controller.setMessageAccepter(appClient.getMessageAccepter());
 
             primaryStage.setTitle("Pixel Battle");
             primaryStage.setScene(new Scene(root));

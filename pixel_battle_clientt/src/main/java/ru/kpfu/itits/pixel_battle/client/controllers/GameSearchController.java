@@ -27,12 +27,6 @@ public class GameSearchController {
     private MessageAccepter messageAccepter;
 
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
     private Label gameSearchLabel;
 
     @FXML
@@ -40,9 +34,6 @@ public class GameSearchController {
 
     @FXML
     private Label gameSearchCount;
-
-    @FXML
-    private Button backButton;
 
     @FXML
     private void options(MouseEvent event) throws ClientException {
@@ -69,10 +60,9 @@ public class GameSearchController {
         }
     }
 
-    @FXML
-    void initialize() {
-        assert gameSearchLabel != null : "fx:id=\"gameSearchLabel\" was not injected: check your FXML file 'gameSearch.fxml'.";
-        assert gameSearchTimer != null : "fx:id=\"gameSearchTimer\" was not injected: check your FXML file 'gameSearch.fxml'.";
+    public GameSearchController(User user, MessageAccepter messageAccepter){
+        this.user = user;
+        this.messageAccepter = messageAccepter;
 
         final int[] seconds = {0};
         final int[] minutes = {0};
@@ -81,7 +71,7 @@ public class GameSearchController {
                         Duration.millis(1000),
 
                         ae -> {
-                            int usersCount =  messageAccepter.getUsers().size() + 1;
+                            int usersCount =  messageAccepter.getUsers().size();
                             gameSearchCount.setText("Игроков в поиске: " + usersCount);
                             user.setAction(UserAction.BATTLE_SEARCH);
                             if(usersCount == 5){
@@ -115,6 +105,12 @@ public class GameSearchController {
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+    }
+
+    @FXML
+    void initialize() {
+        assert gameSearchLabel != null : "fx:id=\"gameSearchLabel\" was not injected: check your FXML file 'gameSearch.fxml'.";
+        assert gameSearchTimer != null : "fx:id=\"gameSearchTimer\" was not injected: check your FXML file 'gameSearch.fxml'.";
     }
 
     public void setUser(User user){

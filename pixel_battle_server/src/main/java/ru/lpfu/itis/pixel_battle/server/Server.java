@@ -26,8 +26,15 @@ public class Server {
         while (true) {
             Socket client = s1.accept();
             Connection connection = new Connection(this, client, id++);
-            connection.sendMessage(new Message(UserAction.USER_CREATED, connection.getId()));
             connections.add(connection);
+            connection.sendMessage(Message.createMessage(UserAction.USER_CREATED, connection.getId()), connection.getSocket());
+//            Iterator<Connection> iterator = connectionsIterator();
+//            while(iterator.hasNext()){
+//                Connection connectionn = iterator.next();
+//                if(!connectionn.equals(connection)){
+//                    connectionn.sendMessage(Message.createMessage(UserAction.USER_CREATED, connection.getId()), connection.getSocket());
+//                }
+//            }
         }
     }
 

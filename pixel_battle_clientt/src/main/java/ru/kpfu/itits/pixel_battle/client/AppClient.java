@@ -13,9 +13,9 @@ import java.net.UnknownHostException;
 public class AppClient implements Runnable{
     private User user;
     private volatile MessageAccepter messageAccepter;
+    private volatile boolean isConnected = false;
 
-    public AppClient(User user) throws IOException {
-        this.user = user;
+    public AppClient() throws IOException {
         Thread thread = new Thread(this);
         thread.start();
     }
@@ -24,13 +24,18 @@ public class AppClient implements Runnable{
         return messageAccepter;
     }
 
+    public boolean isConnected(){
+        return isConnected;
+    }
+
     @Override
     public void run() {
         try {
             SocketClient socket = new SocketClient(InetAddress.getLocalHost(), Protocol.PORT, user);
-            socket.connect();
             MessageSender sender = new MessageSender(socket);
             messageAccepter = new MessageAccepter(socket);
+            socket.connect();
+            isConnected = true;
             while (true) {
 
             }

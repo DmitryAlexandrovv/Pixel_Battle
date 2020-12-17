@@ -12,7 +12,9 @@ public enum UserAction {
     TANK_MOVE_BACK(6),
     TANK_ROTATE_LEFT(7),
     TANK_ROTATE_RIGHT(8),
-    TANK_SHOT(9);
+    TANK_SHOT(9),
+    USER_CREATED(10),
+    CREATE_USER(11);
 
     private int b;
 

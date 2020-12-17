@@ -1,6 +1,7 @@
 package ru.lpfu.itis.pixel_battle.server.connection;
 
 import ru.kpfu.itis.pixel_battle.protocol.Message;
+import ru.kpfu.itis.pixel_battle.protocol.UserAction;
 import ru.lpfu.itis.pixel_battle.server.Server;
 
 import java.io.IOException;
@@ -20,6 +21,10 @@ public class Connection implements Runnable {
         this.id = id;
         thread = new Thread(this);
         thread.start();
+    }
+
+    public int getId(){
+        return this.id;
     }
 
     public void run() {

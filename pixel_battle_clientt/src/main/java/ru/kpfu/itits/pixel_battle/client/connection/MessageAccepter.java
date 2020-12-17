@@ -16,6 +16,7 @@ import java.util.List;
 public class MessageAccepter implements Runnable{
     private SocketClient socket;
     private Thread thread;
+    private volatile User user;
     private volatile List<User> users;
 
     public MessageAccepter(SocketClient socket){
@@ -54,11 +55,17 @@ public class MessageAccepter implements Runnable{
                 System.out.println("accepter " + message.getUserAction());
 
                 if(message.getUserAction().equals(UserAction.USER_CREATED)){
+                    this.user = new User(message.getUserId());
+                } else if(message.getUserAction().equals(UserAction.BATTLE_SEARCH)){
                     addUser(new User(message.getUserId()));
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public User getUser(){
+        return this.user;
     }
 }

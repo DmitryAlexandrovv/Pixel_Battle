@@ -3,6 +3,7 @@ package ru.kpfu.itits.pixel_battle.client.controllers;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import ru.kpfu.itis.pixel_battle.protocol.UserAction;
@@ -82,14 +83,19 @@ public class GameSearchController {
                         Duration.millis(1000),
 
                         ae -> {
+                            System.out.println("!!!!!!!!!!!!");
                             int usersCount =  messageAccepter.getUsers().size() + 1;
                             gameSearchCount.setText("Игроков в поиске: " + usersCount);
                             user.setAction(UserAction.BATTLE_SEARCH);
                             if(usersCount == 2){
+                                this.timeline.stop();
+
                                 FXMLLoader loader=new FXMLLoader();
                                 loader.setLocation(Main.class.getResource("/markup/map.fxml"));
+
                                 try {
                                     Parent mainLayout = loader.load();
+
                                     MapController controller = loader.getController();
 
                                     Iterator<User> iterator = messageAccepter.getUsers().iterator();
@@ -104,10 +110,13 @@ public class GameSearchController {
                                     user.setAction(UserAction.IN_THE_BATTLE);
                                     controller.setUser(user);
 
+                                    controller.drawUser();
+                                    controller.initUserActions();
+                                    controller.drawEnemy();
+                                    controller.initEnemyActions();
+
                                     Stage appStage = (Stage) gameSearchLabel.getScene().getWindow();
                                     appStage.getScene().setRoot(mainLayout);
-
-                                    this.timeline.stop();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }

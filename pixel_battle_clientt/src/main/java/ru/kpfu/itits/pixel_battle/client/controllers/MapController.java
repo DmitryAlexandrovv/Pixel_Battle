@@ -2,6 +2,7 @@ package ru.kpfu.itits.pixel_battle.client.controllers;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
@@ -42,11 +43,6 @@ public class MapController {
     private Tank getTank(){
         return user.getTank();
     }
-
-//    public MapController(User user, User enemy){
-//        this.user = user;
-//        this.enemy = enemy;
-//    }
 
     public void initialize() throws Exception {
 
@@ -187,11 +183,16 @@ public class MapController {
         floor.makeImage(lawnGrid);
         floor = new StandartFloor(40, 40, 11, 4);
         floor.makeImage(lawnGrid);
+    }
 
+    public void drawUser(){
+        Tank tank = user.getTank();
+        tank.makeImage(lawnGrid);
+    }
+
+    public void initUserActions(){
         lawnGrid.sceneProperty().addListener((observableScene, oldScene, newScene) -> {
             Tank tank = user.getTank();
-            tank.makeImage(lawnGrid);
-
             if (oldScene == null && newScene != null) {
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                     if(event.getCode() == KeyCode.W){
@@ -219,6 +220,7 @@ public class MapController {
                     }
                 });
                 newScene.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
+                    user.setAction(UserAction.TANK_SHOT);
                     Shot shot = tank.tankFire();
                     shot.makeImage(lawnGrid);
                 });
@@ -227,39 +229,42 @@ public class MapController {
                 });
             }
         });
+    }
 
-        Timeline timeline = new Timeline(
-                new KeyFrame(
-                        Duration.millis(1000),
-                        ae -> {
-                            Tank tank = enemy.getTank();
-                            tank.makeImage(lawnGrid);
-                        }
-                )
-        );
+    public void drawEnemy(){
+        Tank tank = enemy.getTank();
+        tank.makeImage(lawnGrid);
+    }
 
-        timeline.setCycleCount(1);
-        timeline.play();
+    public void initEnemyActions(){
 
-        Timeline timeline1 = new Timeline(
-                new KeyFrame(
-                        Duration.millis(40),
-                        ae -> {
-                            UserAction action = enemy.getAction();
-                            if(action.equals(UserAction.TANK_MOVE_FORWARD)){
-//                                enemy.setAction(UserAction.STATE);
-                                System.out.println("Enemy is moved");
-                                enemy.getTank().tankMoveForward();
-                            }
-                            if(action.equals(UserAction.STATE)){
-                                System.out.println("i am wait");
-                            }
-                        }
-                )
-        );
-
-        timeline1.setCycleCount(Timeline.INDEFINITE);
-        timeline1.play();
+        Thread enemyThread = new Thread(() -> {
+            while(true){
+                if(enemy.getFlag()){
+                    UserAction action = enemy.getAction();
+                    switch (action){
+                        case TANK_MOVE_FORWARD:
+                            enemy.getTank().tankMoveForward();
+                            break;
+                        case TANK_MOVE_BACK:
+                            enemy.getTank().tankMoveBack();
+                            break;
+                        case TANK_ROTATE_LEFT:
+                            enemy.getTank().tankRotateLeft();
+                            break;
+                        case TANK_ROTATE_RIGHT:
+                            enemy.getTank().tankRotateRight();
+                            break;
+                        case TANK_SHOT:
+                            Shot shot = enemy.getTank().tankFire();
+                            break;
+                        case STATE:
+                            System.out.println("I am wait");
+                            break;
+                    }
+                }
+            }
+        });
     }
 
     public void setUser(User user){

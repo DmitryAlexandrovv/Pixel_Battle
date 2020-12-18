@@ -63,12 +63,28 @@ public class MessageAccepter implements Runnable{
                 System.out.println("accepter " + message.getUserAction());
                 System.out.println(message.getUserId());
 
-                if(message.getUserAction().equals(UserAction.BATTLE_SEARCH)){
-                    addUser(new User(message.getUserId()));
-                } else if(message.getUserAction().equals(UserAction.TANK_MOVE_FORWARD)){
-                    setAction(message.getUserAction(), message.getUserId());
-                } else if(message.getUserAction().equals(UserAction.STATE)){
-                    setAction(message.getUserAction(), message.getUserId());
+                UserAction action = message.getUserAction();
+
+                switch (action){
+                    case BATTLE_SEARCH:
+                        addUser(new User(message.getUserId(), UserAction.IN_THE_BATTLE));
+                        break;
+                    case TANK_MOVE_FORWARD:
+                        setAction(action, message.getUserId());
+                        break;
+                    case TANK_MOVE_BACK:
+                        setAction(action, message.getUserId());
+                        break;
+                    case TANK_ROTATE_LEFT:
+                        setAction(action, message.getUserId());
+                        break;
+                    case TANK_ROTATE_RIGHT:
+                        setAction(action, message.getUserId());
+                        break;
+                    case TANK_SHOT:
+                        setAction(action, message.getUserId());
+                    case STATE:
+                        setAction(action, message.getUserId());
                 }
             }
         } catch (IOException e) {

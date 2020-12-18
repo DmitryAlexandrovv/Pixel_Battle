@@ -21,7 +21,7 @@ public class Main extends Application {
 
             Parent root = loader.load();
 
-            this.user = new User(1); // как задавать id?
+            this.user = new User(2); // как задавать id?
 
             AppClient appClient = new AppClient(user);
 

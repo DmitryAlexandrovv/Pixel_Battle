@@ -19,6 +19,13 @@ public class User implements Serializable {
         this.tank = new PixelTank(30, 30, 6, 6);
     }
 
+    public User(int id, UserAction action){
+        this.userId = id;
+        this.flag = false;
+        this.tank = new PixelTank(30, 30, 6, 6);
+        this.action = action;
+    }
+
     public User(Tank tank, UserAction action, Boolean flag) {
         this.tank = tank;
         this.action = action;

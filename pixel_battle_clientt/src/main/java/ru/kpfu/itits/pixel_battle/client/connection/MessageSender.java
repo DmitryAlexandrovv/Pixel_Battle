@@ -34,7 +34,7 @@ public class MessageSender implements Runnable{
                     }
                     UserAction action = user.getAction();
                     System.out.println("sender " + action);
-                    Message request = Message.createMessage(action);
+                    Message request = Message.createMessage(action, user.getUserId());
                     socket.sendMessage(request);
                 }
             } catch (ClientException e) {

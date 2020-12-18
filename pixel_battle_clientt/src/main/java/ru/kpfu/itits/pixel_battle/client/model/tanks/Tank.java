@@ -98,4 +98,8 @@ public abstract class Tank extends GameElements {
     public double getSpeed() {
         return speed;
     }
+
+    public void setX(double x){
+        img.setTranslateX(x);
+    }
 }

@@ -2,6 +2,7 @@ package ru.kpfu.itits.pixel_battle.client.controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 import ru.kpfu.itis.pixel_battle.protocol.UserAction;
@@ -84,18 +85,29 @@ public class GameSearchController {
                             int usersCount =  messageAccepter.getUsers().size() + 1;
                             gameSearchCount.setText("Игроков в поиске: " + usersCount);
                             user.setAction(UserAction.BATTLE_SEARCH);
-                            if(usersCount == 10){
+                            if(usersCount == 2){
                                 FXMLLoader loader=new FXMLLoader();
                                 loader.setLocation(Main.class.getResource("/markup/map.fxml"));
                                 try {
                                     Parent mainLayout = loader.load();
+                                    MapController controller = loader.getController();
+
+                                    Iterator<User> iterator = messageAccepter.getUsers().iterator();
+                                    while(iterator.hasNext()){
+                                        User enemy = iterator.next();
+                                        if(!enemy.equals(this.user)){
+                                            controller.setEnemy(enemy);
+                                            break;
+                                        }
+                                    }
 
                                     user.setAction(UserAction.IN_THE_BATTLE);
-                                    MapController controller = loader.getController();
                                     controller.setUser(user);
 
                                     Stage appStage = (Stage) gameSearchLabel.getScene().getWindow();
                                     appStage.getScene().setRoot(mainLayout);
+
+                                    this.timeline.stop();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }

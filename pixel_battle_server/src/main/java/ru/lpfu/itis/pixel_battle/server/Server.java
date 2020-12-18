@@ -12,14 +12,15 @@ import java.util.List;
 
 public class Server {
     private volatile List<Connection> connections;
-    private static int id = 0;
+    private volatile int id;
 
     public Server() throws IOException {
         connections = new ArrayList<>();
+        id = 0;
         init();
     }
 
-    public void init() throws IOException {
+    private void init() throws IOException {
         ServerSocket s1 = new ServerSocket(Protocol.PORT);
         while (true) {
             Socket client = s1.accept();

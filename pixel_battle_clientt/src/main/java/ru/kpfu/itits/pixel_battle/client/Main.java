@@ -21,7 +21,8 @@ public class Main extends Application {
 
             Parent root = loader.load();
 
-            this.user = new User();
+            this.user = new User(1); // как задавать id?
+
             AppClient appClient = new AppClient(user);
 
             user.setAction(UserAction.INTRO_MENU);

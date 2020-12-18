@@ -12,12 +12,10 @@ public class Connection implements Runnable {
     private Socket socket;
     private Thread thread;
     private Server server;
-    private int id;
 
     public Connection(Server server, Socket socket, int id) {
         this.server = server;
         this.socket = socket;
-        this.id = id;
         thread = new Thread(this);
         thread.start();
     }

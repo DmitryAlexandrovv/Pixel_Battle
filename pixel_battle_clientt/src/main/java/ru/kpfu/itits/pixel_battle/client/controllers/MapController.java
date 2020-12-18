@@ -1,6 +1,5 @@
 package ru.kpfu.itits.pixel_battle.client.controllers;
 
-import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -11,8 +10,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 import ru.kpfu.itis.pixel_battle.protocol.UserAction;
-import ru.kpfu.itits.pixel_battle.client.SocketClient;
-import ru.kpfu.itits.pixel_battle.client.connection.MessageAccepter;
 import ru.kpfu.itits.pixel_battle.client.model.floors.Floor;
 import ru.kpfu.itits.pixel_battle.client.exceptions.ClientException;
 import ru.kpfu.itits.pixel_battle.client.model.User;
@@ -23,22 +20,17 @@ import ru.kpfu.itits.pixel_battle.client.model.walls.StandartWall;
 import ru.kpfu.itits.pixel_battle.client.model.walls.UnbrokenWall;
 import ru.kpfu.itits.pixel_battle.client.model.walls.Wall;
 
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Date;
 
 public class MapController {
-    private User user;
+    private volatile User user;
+    private volatile User enemy;
 
     @FXML
     public Button optionsMenuButton;
 
     @FXML
     private GridPane lawnGrid;
-
-    @FXML
-    private GridPane mapPage;
 
     @FXML
     private void options(MouseEvent event) throws ClientException {
@@ -50,6 +42,11 @@ public class MapController {
     private Tank getTank(){
         return user.getTank();
     }
+
+//    public MapController(User user, User enemy){
+//        this.user = user;
+//        this.enemy = enemy;
+//    }
 
     public void initialize() throws Exception {
 
@@ -211,6 +208,7 @@ public class MapController {
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                     if(event.getCode() == KeyCode.A){
                         user.setAction(UserAction.TANK_ROTATE_LEFT);
+                        double deg = tank.getRotate();
                         tank.tankRotateLeft();
                     }
                 });
@@ -224,6 +222,9 @@ public class MapController {
                     Shot shot = tank.tankFire();
                     shot.makeImage(lawnGrid);
                 });
+                newScene.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+                    user.setAction(UserAction.STATE);
+                });
             }
         });
 
@@ -231,16 +232,41 @@ public class MapController {
                 new KeyFrame(
                         Duration.millis(1000),
                         ae -> {
-
+                            Tank tank = enemy.getTank();
+                            tank.makeImage(lawnGrid);
                         }
                 )
         );
 
         timeline.setCycleCount(1);
         timeline.play();
+
+        Timeline timeline1 = new Timeline(
+                new KeyFrame(
+                        Duration.millis(40),
+                        ae -> {
+                            UserAction action = enemy.getAction();
+                            if(action.equals(UserAction.TANK_MOVE_FORWARD)){
+//                                enemy.setAction(UserAction.STATE);
+                                System.out.println("Enemy is moved");
+                                enemy.getTank().tankMoveForward();
+                            }
+                            if(action.equals(UserAction.STATE)){
+                                System.out.println("i am wait");
+                            }
+                        }
+                )
+        );
+
+        timeline1.setCycleCount(Timeline.INDEFINITE);
+        timeline1.play();
     }
 
     public void setUser(User user){
         this.user = user;
+    }
+
+    public void setEnemy(User enemy){
+        this.enemy = enemy;
     }
 }

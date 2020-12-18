@@ -30,8 +30,26 @@ public class MessageAccepter implements Runnable{
     }
 
     private void addUser(User user){
-        if(!users.contains(user)){
-            users.add(user);
+        Iterator<User> iterator = users.iterator();
+
+        while(iterator.hasNext()){
+            User oldUser = iterator.next();
+            if(oldUser.equals(user)){
+               return;
+            }
+        }
+
+        users.add(user);
+    }
+
+    private void setAction(UserAction action, int id){
+        Iterator<User> iterator = users.iterator();
+
+        while(iterator.hasNext()){
+            User user = iterator.next();
+            if(user.getUserId() == id){
+                user.setAction(action);
+            }
         }
     }
 
@@ -43,9 +61,14 @@ public class MessageAccepter implements Runnable{
                 Message message = Message.readMessage(socket.getInputStream());
 
                 System.out.println("accepter " + message.getUserAction());
+                System.out.println(message.getUserId());
 
                 if(message.getUserAction().equals(UserAction.BATTLE_SEARCH)){
-                    addUser(new User());
+                    addUser(new User(message.getUserId()));
+                } else if(message.getUserAction().equals(UserAction.TANK_MOVE_FORWARD)){
+                    setAction(message.getUserAction(), message.getUserId());
+                } else if(message.getUserAction().equals(UserAction.STATE)){
+                    setAction(message.getUserAction(), message.getUserId());
                 }
             }
         } catch (IOException e) {

@@ -11,11 +11,10 @@ public class User implements Serializable {
     protected Tank tank;
     protected volatile UserAction action;
     private volatile Boolean flag;
-    private static int id = 0;
-    private int user_id;
+    private int userId;
 
-    public User(){
-        this.user_id = id;
+    public User(int id){
+        this.userId = id;
         this.flag = false;
         this.tank = new PixelTank(30, 30, 6, 6);
     }
@@ -45,6 +44,15 @@ public class User implements Serializable {
     }
 
     public int getUserId() {
-        return user_id;
+        return userId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        User user = (User) obj;
+        if(user.getUserId() == this.getUserId()){
+            return true;
+        }
+        return false;
     }
 }

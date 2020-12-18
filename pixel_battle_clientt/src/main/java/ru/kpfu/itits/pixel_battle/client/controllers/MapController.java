@@ -237,7 +237,6 @@ public class MapController {
     }
 
     public void initEnemyActions(){
-
         Thread enemyThread = new Thread(() -> {
             while(true){
                 if(enemy.getFlag()){
@@ -257,6 +256,12 @@ public class MapController {
                             break;
                         case TANK_SHOT:
                             Shot shot = enemy.getTank().tankFire();
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    shot.makeImage(lawnGrid);
+                                }
+                            });
                             break;
                         case STATE:
                             System.out.println("I am wait");
@@ -265,6 +270,8 @@ public class MapController {
                 }
             }
         });
+
+        enemyThread.start();
     }
 
     public void setUser(User user){

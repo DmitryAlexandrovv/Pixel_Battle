@@ -277,8 +277,8 @@ public class MapController {
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                     if(event.getCode() == KeyCode.W){
                         Position position = new Position(user.getTank().getPosition());
-                        position.setX(user.getTank().getChangeX());
-                        position.setY(user.getTank().getChangeY());
+                        position.setX(user.getTank().getChangeXForw() * (-1));
+                        position.setY(user.getTank().getChangeYForw() * (-1));
 
                         Boolean element = getElemtnByPosition(position);
 
@@ -292,7 +292,12 @@ public class MapController {
                 });
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                     if(event.getCode() == KeyCode.S){
-                        Boolean element = getElemtnByPosition(user.getTank().getPosition());
+                        Position position = new Position(user.getTank().getPosition());
+                        position.setX(user.getTank().getChangeXBack() * (-1));
+                        position.setY(user.getTank().getChangeYBack() * (-1));
+
+                        Boolean element = getElemtnByPosition(position);
+
                         if(element){
 
                         } else {
@@ -317,7 +322,7 @@ public class MapController {
                 newScene.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> {
                     user.setAction(UserAction.TANK_SHOT);
                     Shot shot = tank.tankFire();
-                    shot.makeImage(lawnGrid);
+                    shot.makeImage(lawnGrid, gameElements);
                 });
                 newScene.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
                     user.setAction(UserAction.STATE);

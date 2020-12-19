@@ -35,12 +35,20 @@ public abstract class Tank extends GameElements {
         this.position = new Position(col, row, col * 50 + 20, row * 50 - 20); // слева сниз значит минус остаток
     }
 
-    public double getChangeX(){
-        return Math.sin(Math.toRadians(img.getRotate())) * this.getSpeed();
+    public double getChangeXForw(){
+        return Math.sin(Math.toRadians(getRotate())) * this.getSpeed();
     }
 
-    public double getChangeY(){
+    public double getChangeYForw(){
         return Math.cos(Math.toRadians(getRotate())) * this.getSpeed();
+    }
+
+    public double getChangeXBack(){
+        return Math.sin(Math.toRadians(getRotate())) * (-this.getSpeed());
+    }
+
+    public double getChangeYBack(){
+        return Math.cos(Math.toRadians(getRotate())) * (-this.getSpeed());
     }
 
     public void tankMoveForward()
@@ -87,7 +95,7 @@ public abstract class Tank extends GameElements {
     }
 
     public Shot tankFire(){
-        PixelTankShot shot = new PixelTankShot(10, 10, this);
+        PixelTankShot shot = new PixelTankShot(this.position.getCol(), this.position.getRow(), 10, 10, this);
         return shot;
     }
 

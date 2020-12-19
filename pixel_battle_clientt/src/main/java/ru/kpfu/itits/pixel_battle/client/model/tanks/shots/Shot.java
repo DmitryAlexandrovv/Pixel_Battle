@@ -18,7 +18,7 @@ public abstract class Shot extends GameElements {
     protected double rotate;
 
     public Shot(String path, int width, int height, Tank tank) {
-        super(path, width, height);
+        super(path, width, height, 0, 0);
         this.col = 0;
         this.row = 0;
         this.tank = tank;

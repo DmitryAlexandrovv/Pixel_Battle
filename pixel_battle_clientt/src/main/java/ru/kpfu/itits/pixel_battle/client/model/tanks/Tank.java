@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import ru.kpfu.itits.pixel_battle.client.model.GameElements;
+import ru.kpfu.itits.pixel_battle.client.model.Position;
 import ru.kpfu.itits.pixel_battle.client.model.tanks.shots.PixelTankShot;
 import ru.kpfu.itits.pixel_battle.client.model.tanks.shots.Shot;
 
@@ -14,12 +15,10 @@ public abstract class Tank extends GameElements {
     protected int hp;
     protected double shotSpeed;
     protected double speed;
-    protected double x;
-    protected double y;
-    protected double rotate;
+    protected Position position;
 
     public Tank(String path, int width, int height, int col, int row, double damage, int hp, double shotSpeed, double speed) {
-        super(path, width, height);
+        super(path, width, height, col, row);
         this.col = col;
         this.row = row;
         this.damage = damage;
@@ -33,19 +32,42 @@ public abstract class Tank extends GameElements {
         Image im = new Image(path, width, height,false,false);
         img.setImage(im);
         lawn.add(img, col, row,1,1);
+        this.position = new Position(col, row, col * 50 + 20, row * 50 - 20); // слева сниз значит минус остаток
+    }
+
+    public double getChangeX(){
+        return Math.sin(Math.toRadians(img.getRotate())) * this.getSpeed();
+    }
+
+    public double getChangeY(){
+        return Math.cos(Math.toRadians(getRotate())) * this.getSpeed();
     }
 
     public void tankMoveForward()
     {
         double rotate = img.getRotate();
-        img.setTranslateX(img.getTranslateX() + Math.sin(Math.toRadians(rotate)) * this.getSpeed());
-        img.setTranslateY(img.getTranslateY() - Math.cos(Math.toRadians(rotate)) * this.getSpeed());
+        double changeX = Math.sin(Math.toRadians(rotate)) * this.getSpeed();
+        double changeY = Math.cos(Math.toRadians(rotate)) * this.getSpeed();
+        img.setTranslateX(img.getTranslateX() + changeX);
+        img.setTranslateY(img.getTranslateY() - changeY);
+
+        this.position.setX(changeX * (-1));
+        this.position.setY(changeY * (-1));
+//        this.position.setCol((int)(this.position.getX()) / 50);
+//        this.position.setRow((int)(this.position.getY()) / 50);
     }
 
     public void tankMoveBack(){
         double rotate = img.getRotate();
-        img.setTranslateX(img.getTranslateX() + Math.sin(Math.toRadians(rotate)) * (-this.getSpeed()));
-        img.setTranslateY(img.getTranslateY() - Math.cos(Math.toRadians(rotate)) * (-this.getSpeed()));
+        double changeX = Math.sin(Math.toRadians(rotate)) * (-this.getSpeed());
+        double changeY = Math.cos(Math.toRadians(rotate)) * (-this.getSpeed());
+        img.setTranslateX(img.getTranslateX() + changeX);
+        img.setTranslateY(img.getTranslateY() - changeY);
+
+        this.position.setX(changeX * (-1));
+        this.position.setY(changeY * (-1));
+//        this.position.setCol((int)(this.position.getX()) / 50);
+//        this.position.setRow((int)(this.position.getY()) / 50);
     }
 
     public void tankRotateLeft(){
@@ -54,6 +76,14 @@ public abstract class Tank extends GameElements {
 
     public void tankRotateRight(){
         img.setRotate(img.getRotate() + 1);
+    }
+
+    public void tankRotateLeft(double deg){
+        img.setRotate(img.getRotate() - deg);
+    }
+
+    public void tankRotateRight(double deg){
+        img.setRotate(img.getRotate() + deg);
     }
 
     public Shot tankFire(){
@@ -101,5 +131,9 @@ public abstract class Tank extends GameElements {
 
     public void setX(double x){
         img.setTranslateX(x);
+    }
+
+    public Position getPosition(){
+        return position;
     }
 }

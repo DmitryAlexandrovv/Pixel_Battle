@@ -16,13 +16,11 @@ public class User implements Serializable {
     public User(int id){
         this.userId = id;
         this.flag = false;
-        this.tank = new PixelTank(30, 30, 6, 6);
     }
 
     public User(int id, UserAction action){
         this.userId = id;
         this.flag = false;
-        this.tank = new PixelTank(30, 30, 6, 6);
         this.action = action;
     }
 
@@ -52,6 +50,10 @@ public class User implements Serializable {
 
     public int getUserId() {
         return userId;
+    }
+
+    public void setTank(Tank tank) {
+        this.tank = tank;
     }
 
     @Override

@@ -10,7 +10,7 @@ public abstract class Floor extends GameElements {
     protected int row;
 
     public Floor(String path, int width, int height, int col, int row) {
-        super(path, width, height);
+        super(path, width, height, col, row);
         this.col = col;
         this.row = row;
     }

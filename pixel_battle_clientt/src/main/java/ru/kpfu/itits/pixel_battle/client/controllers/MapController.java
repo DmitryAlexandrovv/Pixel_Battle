@@ -4,6 +4,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -11,21 +12,27 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.util.Duration;
 import ru.kpfu.itis.pixel_battle.protocol.UserAction;
+import ru.kpfu.itits.pixel_battle.client.model.GameElements;
+import ru.kpfu.itits.pixel_battle.client.model.Position;
 import ru.kpfu.itits.pixel_battle.client.model.floors.Floor;
 import ru.kpfu.itits.pixel_battle.client.exceptions.ClientException;
 import ru.kpfu.itits.pixel_battle.client.model.User;
 import ru.kpfu.itits.pixel_battle.client.model.floors.StandartFloor;
+import ru.kpfu.itits.pixel_battle.client.model.tanks.PixelTank;
 import ru.kpfu.itits.pixel_battle.client.model.tanks.Tank;
+import ru.kpfu.itits.pixel_battle.client.model.tanks.shots.EnemyTank;
 import ru.kpfu.itits.pixel_battle.client.model.tanks.shots.Shot;
 import ru.kpfu.itits.pixel_battle.client.model.walls.StandartWall;
 import ru.kpfu.itits.pixel_battle.client.model.walls.UnbrokenWall;
 import ru.kpfu.itits.pixel_battle.client.model.walls.Wall;
 
-import java.util.Date;
+import java.nio.file.attribute.PosixFileAttributes;
+import java.util.*;
 
 public class MapController {
     private volatile User user;
     private volatile User enemy;
+    private HashMap<Position, GameElements> gameElements;
 
     @FXML
     public Button optionsMenuButton;
@@ -45,6 +52,7 @@ public class MapController {
     }
 
     public void initialize() throws Exception {
+        gameElements = new HashMap<>();
 
         Wall wall = new UnbrokenWall(40, 40, 0, 0);
         wall.makeImage(lawnGrid);
@@ -82,8 +90,21 @@ public class MapController {
         wall.makeImage(lawnGrid);
         wall = new UnbrokenWall(40, 40, 17, 0);
         wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 0);
+        wall = new UnbrokenWall(40, 40, 18, 0);
         wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 19, 0);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 20, 0);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 21, 0);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 22, 0);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 23, 0);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 0);
+        wall.makeImage(lawnGrid);
+
         wall = new UnbrokenWall(40, 40, 0, 1);
         wall.makeImage(lawnGrid);
         wall = new UnbrokenWall(40, 40, 0, 2);
@@ -104,80 +125,138 @@ public class MapController {
         wall.makeImage(lawnGrid);
         wall = new UnbrokenWall(40, 40, 0, 10);
         wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 1);
+        wall = new UnbrokenWall(40, 40, 0, 11);
         wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 2);
+        wall = new UnbrokenWall(40, 40, 0, 12);
         wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 3);
+        wall = new UnbrokenWall(40, 40, 0, 13);
         wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 4);
+        wall = new UnbrokenWall(40, 40, 0, 14);
         wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 5);
+        wall = new UnbrokenWall(40, 40, 0, 15);
         wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 6);
+        wall = new UnbrokenWall(40, 40, 0, 16);
         wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 7);
+        wall = new UnbrokenWall(40, 40, 0, 17);
         wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 8);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 9);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 0, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 1, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 2, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 3, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 4, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 5, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 6, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 7, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 8, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 9, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 10, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 11, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 12, 10);
-        wall.makeImage(lawnGrid);
-        wall = new UnbrokenWall(40, 40, 13, 10);
+        wall = new UnbrokenWall(40, 40, 0, 18);
         wall.makeImage(lawnGrid);
 
+        wall = new UnbrokenWall(40, 40, 24, 1);
         wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 2);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 3);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 4);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 5);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 6);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 7);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 8);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 9);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 10);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 11);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 12);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 13);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 14);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 15);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 16);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 17);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 18);
+        wall.makeImage(lawnGrid);
+
+        wall = new UnbrokenWall(40, 40, 0, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 1, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 2, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 3, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 4, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 5, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 6, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 7, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 8, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 9, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 10, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 11, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 12, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 13, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 14, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 15, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 16, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 17, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 18, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 19, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 20, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 21, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 22, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 23, 18);
+        wall.makeImage(lawnGrid);
+        wall = new UnbrokenWall(40, 40, 24, 18);
+        wall.makeImage(lawnGrid);
+
         wall = new StandartWall(40, 40, 2, 3);
         wall.makeImage(lawnGrid);
+        gameElements.put(wall.getPosition(), wall);
         wall = new StandartWall(40, 40, 3, 3);
         wall.makeImage(lawnGrid);
+        gameElements.put(wall.getPosition(), wall);
         wall = new StandartWall(40, 40, 4, 3);
         wall.makeImage(lawnGrid);
+        gameElements.put(wall.getPosition(), wall);
         wall = new StandartWall(40, 40, 6, 3);
         wall.makeImage(lawnGrid);
+        gameElements.put(wall.getPosition(), wall);
         wall = new StandartWall(40, 40, 7, 3);
         wall.makeImage(lawnGrid);
+        gameElements.put(wall.getPosition(), wall);
         wall = new StandartWall(40, 40, 8, 3);
         wall.makeImage(lawnGrid);
+        gameElements.put(wall.getPosition(), wall);
         wall = new StandartWall(40, 40, 10, 3);
         wall.makeImage(lawnGrid);
+        gameElements.put(wall.getPosition(), wall);
         wall = new StandartWall(40, 40, 11, 3);
         wall.makeImage(lawnGrid);
+        gameElements.put(wall.getPosition(), wall);
         wall = new StandartWall(40, 40, 12, 3);
         wall.makeImage(lawnGrid);
-        wall = new StandartWall(40, 40, 10, 3);
-        wall.makeImage(lawnGrid);
-        wall = new StandartWall(40, 40, 11, 3);
-        wall.makeImage(lawnGrid);
-        wall = new StandartWall(40, 40, 12, 3);
-        wall.makeImage(lawnGrid);
+        gameElements.put(wall.getPosition(), wall);
 
         Floor floor = new StandartFloor(40, 40, 12, 4);
         floor.makeImage(lawnGrid);
@@ -186,6 +265,7 @@ public class MapController {
     }
 
     public void drawUser(){
+        user.setTank(new PixelTank(30, 30, 6, 6));
         Tank tank = user.getTank();
         tank.makeImage(lawnGrid);
     }
@@ -196,14 +276,29 @@ public class MapController {
             if (oldScene == null && newScene != null) {
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                     if(event.getCode() == KeyCode.W){
-                        user.setAction(UserAction.TANK_MOVE_FORWARD);
-                        tank.tankMoveForward();
+                        Position position = new Position(user.getTank().getPosition());
+                        position.setX(user.getTank().getChangeX());
+                        position.setY(user.getTank().getChangeY());
+
+                        Boolean element = getElemtnByPosition(position);
+
+                        if(element){
+
+                        } else {
+                            user.setAction(UserAction.TANK_MOVE_FORWARD);
+                            tank.tankMoveForward();
+                        }
                     }
                 });
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
                     if(event.getCode() == KeyCode.S){
-                        user.setAction(UserAction.TANK_MOVE_BACK);
-                        tank.tankMoveBack();
+                        Boolean element = getElemtnByPosition(user.getTank().getPosition());
+                        if(element){
+
+                        } else {
+                            user.setAction(UserAction.TANK_MOVE_BACK);
+                            tank.tankMoveBack();
+                        }
                     }
                 });
                 newScene.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
@@ -232,8 +327,10 @@ public class MapController {
     }
 
     public void drawEnemy(){
+        enemy.setTank(new EnemyTank(30, 30, 6, 1));
         Tank tank = enemy.getTank();
         tank.makeImage(lawnGrid);
+        tank.tankRotateRight(180);
     }
 
     public void initEnemyActions(){
@@ -243,6 +340,11 @@ public class MapController {
                     UserAction action = enemy.getAction();
                     switch (action){
                         case TANK_MOVE_FORWARD:
+                            Boolean element = getElemtnByPosition(enemy.getTank().getPosition());
+                            if(element){
+                                System.out.println(1 + "!!!!!!!!!!!");
+                                break;
+                            }
                             enemy.getTank().tankMoveForward();
                             break;
                         case TANK_MOVE_BACK:
@@ -256,11 +358,8 @@ public class MapController {
                             break;
                         case TANK_SHOT:
                             Shot shot = enemy.getTank().tankFire();
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    shot.makeImage(lawnGrid);
-                                }
+                            Platform.runLater(() -> {
+                                shot.makeImage(lawnGrid);
                             });
                             break;
                         case STATE:
@@ -280,5 +379,18 @@ public class MapController {
 
     public void setEnemy(User enemy){
         this.enemy = enemy;
+    }
+
+    public Boolean getElemtnByPosition(Position position){
+        Set<Position> set  = gameElements.keySet();
+        Iterator<Position> iterator = set.iterator();
+        while(iterator.hasNext()){
+            Position elemPosition = iterator.next();
+            if(elemPosition.equals(position)){
+                System.out.println("Finding");
+                return true;
+            }
+        }
+        return false;
     }
 }
